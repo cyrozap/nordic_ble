@@ -354,7 +354,7 @@ dissect_lengths(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree)
     plen 			= tvb_get_guint8(tvb, UART_PACKET_PACKET_LEN_INDEX);
   }
   
-	if ((hlen + plen) != tvb_length(tvb))
+	if ((hlen + plen) != tvb_captured_length(tvb))
 	{
     if (!legacy_mode)
     {
@@ -643,14 +643,14 @@ dissect_nordic_ble(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree, void *da
   if (legacy_mode)
   {
     dissect_header_0_9_7(tvb, pinfo, tree, data);
-    payload_tvb = tvb_new_subset(tvb, _0_9_7_UART_HEADER_LENGTH, -1, tvb_length(tvb) - _0_9_7_UART_HEADER_LENGTH);
+    payload_tvb = tvb_new_subset(tvb, _0_9_7_UART_HEADER_LENGTH, -1, tvb_captured_length(tvb) - _0_9_7_UART_HEADER_LENGTH);
   }
   else
   {
     dissect_header_1_0_0(tvb, pinfo, tree, data);
     /* have to take BOARD_ID into account, as the stripped version is local to dissect_1_0_0 */
     payload_tvb = tvb_new_subset(tvb, UART_HEADER_LENGTH + BOARD_ID_LENGTH, -1, 
-                                    tvb_length(tvb) - UART_HEADER_LENGTH - BOARD_ID_LENGTH);
+                                    tvb_captured_length(tvb) - UART_HEADER_LENGTH - BOARD_ID_LENGTH);
   }
   
 
